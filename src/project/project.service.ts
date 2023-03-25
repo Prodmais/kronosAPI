@@ -5,7 +5,7 @@ import {
 } from '@nestjs/common';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { CreateProjectDto } from './dto';
+import { CreateProjectDto, EditProjectDto } from './dto';
 import { PROJECT_ERROR } from './error';
 
 @Injectable()
@@ -77,5 +77,32 @@ export class ProjectService {
     }
 
     return projectExist;
+  }
+
+  async update(userId: number, id: number, data: EditProjectDto) {
+    await this.findOne(userId, id);
+
+    const editedProject = await this.prisma.projects.update({
+      where: {
+        id: id,
+      },
+      data: {
+        ...data,
+      },
+    });
+
+    return editedProject;
+  }
+
+  findAll(userId: number) {
+    return this.prisma.projects.findMany({
+      where: {
+        UsersIntegrated: {
+          some: {
+            userId: userId,
+          },
+        },
+      },
+    });
   }
 }
