@@ -1,4 +1,14 @@
-import { Body, Controller, Post, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  HttpCode,
+  HttpStatus,
+  Param,
+  ParseIntPipe,
+  Post,
+  UseGuards,
+} from '@nestjs/common';
 import { GetUser } from 'src/auth/decorator';
 import { JwtGuard } from 'src/auth/guard';
 import { CreateProjectDto } from './dto';
@@ -12,5 +22,14 @@ export class ProjectController {
   @Post('')
   create(@GetUser('id') id: number, @Body() data: CreateProjectDto) {
     return this.projectService.create(id, data);
+  }
+
+  @Get(':id')
+  @HttpCode(HttpStatus.OK)
+  findOne(
+    @GetUser('id') userId: number,
+    @Param('id', ParseIntPipe) id: number,
+  ) {
+    return this.projectService.findOne(userId, id);
   }
 }
