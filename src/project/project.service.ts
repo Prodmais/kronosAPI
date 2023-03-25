@@ -105,4 +105,14 @@ export class ProjectService {
       },
     });
   }
+
+  async removeBind(userId: number, id: number) {
+    await this.findOne(userId, id);
+
+    await this.prisma.userProjects.deleteMany({
+      where: {
+        projectId: id,
+      },
+    });
+  }
 }

@@ -9,7 +9,7 @@ import {
   Post,
   UseGuards,
 } from '@nestjs/common';
-import { Put } from '@nestjs/common/decorators';
+import { Delete, Put } from '@nestjs/common/decorators';
 import { GetUser } from 'src/auth/decorator';
 import { JwtGuard } from 'src/auth/guard';
 import { CreateProjectDto, EditProjectDto } from './dto';
@@ -48,5 +48,14 @@ export class ProjectController {
   @HttpCode(HttpStatus.OK)
   findAll(@GetUser('id') userId: number) {
     return this.projectService.findAll(userId);
+  }
+
+  @Delete(':id')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  removeBind(
+    @GetUser('id') userId: number,
+    @Param('id', ParseIntPipe) id: number,
+  ) {
+    return this.projectService.removeBind(userId, id);
   }
 }
