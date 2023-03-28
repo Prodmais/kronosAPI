@@ -1,7 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import nodemailer from 'nodemailer';
-import IParseMailTemplate from 'src/interfaces/IParseMailTemplate';
+import mailConfig from '../mail';
 import { HandlebarsMailTemplateService } from './handlebars-mail-template.service';
+import nodemailer from 'nodemailer';
+import aws from 'aws-sdk';
+import IParseMailTemplate from 'src/interfaces/IParseMailTemplate';
 
 interface IMailContact {
   name: string;
@@ -16,29 +18,25 @@ interface ISendMail {
 }
 
 @Injectable()
-export class EtherealMailService {
+export class SESMailService {
 
   constructor() {}
 
   public async sendMail({ to, from, subject, templateData }: ISendMail): Promise<void> {
-    const account = await nodemailer.createTestAccount();
-    const mailTemplate = new HandlebarsMailTemplateService()
+    const mailTemplate = new HandlebarsMailTemplateService();
 
     const transporter = nodemailer.createTransport({
-      host: account.smtp.host,
-      port: account.smtp.port,
-      secure: account.smtp.secure,
-      auth: {
-        user: account.user,
-        pass: account.pass
-      }
+      SES: new aws.SES({
+        apiVersion: '2022-12-21',
+      })
     });
 
+    const { email, name } = mailConfig.defaults.from;
 
     const message = await transporter.sendMail({
       from: {
-        name: from?.name || "Equipe Cronos",
-        address: from?.email || "equipe@equipe.com.br"
+        name: from?.name || name,           // ||"Equipe API Vendas",
+        address: from?.email || email       // || "equipe@equipe.com.br"
       },
       to: {
         name: to.name,
@@ -47,8 +45,5 @@ export class EtherealMailService {
       subject,
       html: await mailTemplate.parse(templateData)
     });
-
-    console.log(`Message sent: ${message.messageId}`);
-    console.log(`Preview URL: ${nodemailer.getTestMessageUrl(message)}`);
   }
 }

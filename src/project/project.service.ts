@@ -6,7 +6,7 @@ import {
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateProjectDto, EditProjectDto } from './dto';
-import { PROJECT_ERROR } from './error';
+import { PROJECT_ERROR } from '../error';
 
 @Injectable()
 export class ProjectService {

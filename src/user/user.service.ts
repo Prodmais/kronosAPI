@@ -6,6 +6,16 @@ import { EditUserDto } from './dto';
 export class UserService {
   constructor(private prismaService: PrismaService) {}
 
+  async findByEmail(email: string) {
+    const user = await this.prismaService.users.findFirst({
+      where: {
+        email
+      }
+    });
+
+    return user;
+  }
+
   async update(id: number, data: EditUserDto) {
     const user = await this.prismaService.users.update({
       where: {

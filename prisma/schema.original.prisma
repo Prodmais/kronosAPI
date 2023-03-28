@@ -3,14 +3,14 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
-  url      = "file:./dev.db"
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 model Projects {
   id              Int            @id @default(autoincrement())
-  title           String
-  description     String?
+  title           String         @db.VarChar(40)
+  description     String?        @db.VarChar(255)
   createdAt       DateTime       @default(now())
   updatedAt       DateTime       @updatedAt
   ownerUser       Int?
@@ -34,11 +34,11 @@ model UserProjects {
 
 model Boards {
   id          Int      @id @default(autoincrement())
-  name        String
-  description String?
+  name        String   @db.VarChar(40)
+  description String?  @db.VarChar(255)
   isMobile    Boolean?
-  createdAt   DateTime
-  updatedAt   DateTime
+  createdAt   DateTime @db.Timestamptz(6)
+  updatedAt   DateTime @db.Timestamptz(6)
   userId      Int
   Users       Users    @relation(fields: [userId], references: [id], onDelete: Cascade)
   Tasks       Tasks[]
@@ -48,23 +48,23 @@ model Boards {
 
 model Messages {
   id        Int       @id @default(autoincrement())
-  name      String    @unique
-  type      String
-  createdAt DateTime
-  updatedAt DateTime
-  deletedAt DateTime?
+  name      String    @unique @db.VarChar(40)
+  type      String    @db.VarChar(25)
+  createdAt DateTime  @db.Timestamptz(6)
+  updatedAt DateTime  @db.Timestamptz(6)
+  deletedAt DateTime? @db.Timestamptz(6)
 
   @@map("messages")
 }
 
 model Tasks {
   id          Int       @id @default(autoincrement())
-  name        String
-  description String?
-  status      String
-  endDate     DateTime?
-  createdAt   DateTime
-  updatedAt   DateTime
+  name        String    @db.VarChar(40)
+  description String?   @db.VarChar(255)
+  status      String    @db.VarChar(20)
+  endDate     DateTime? @db.Timestamptz(6)
+  createdAt   DateTime  @db.Timestamptz(6)
+  updatedAt   DateTime  @db.Timestamptz(6)
   boardId     Int
   Boards      Boards    @relation(fields: [boardId], references: [id], onDelete: Cascade)
 
@@ -73,13 +73,13 @@ model Tasks {
 
 model Users {
   id            Int            @id @default(autoincrement())
-  name          String
-  lastName      String
-  email         String         @unique
-  phone         String
-  password      String
-  type          String?
-  token         String?
+  name          String         @db.VarChar(40)
+  lastName      String         @db.VarChar(40)
+  email         String         @unique @db.VarChar(255)
+  phone         String         @db.VarChar(11)
+  password      String         @db.VarChar(255)
+  type          String?        @db.VarChar(25)
+  token         String?        @db.VarChar(255)
   createdAt     DateTime       @default(now())
   updatedAt     DateTime       @updatedAt
   Boards        Boards[]
