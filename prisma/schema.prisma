@@ -7,6 +7,29 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Projects {
+  id          Int       @id @default(autoincrement())
+  title       String    @db.VarChar(40)
+  description String?   @db.VarChar(255)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  ownerUser   Int?
+  Users       Users?     @relation(fields: [ownerUser], references: [id], onDelete: SetNull)
+  UsersIntegrated       UserProjects[]
+  @@map("projects")
+}
+
+model UserProjects {
+  id          Int       @id @default(autoincrement())
+  userId      Int
+  projectId   Int
+  Users       Users     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  Projects    Projects  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  @@map("userProjects")
+}
+
 model Boards {
   id          Int      @id @default(autoincrement())
   name        String   @db.VarChar(40)
@@ -55,5 +78,7 @@ model Users {
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   Boards    Boards[]
+  OwnerProjects   Projects[]
+  Projects  UserProjects[]
   @@map("users")
 }
