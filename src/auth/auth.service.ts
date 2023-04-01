@@ -9,7 +9,7 @@ import {
   ForbiddenException,
 } from '@nestjs/common/exceptions';
 import { compare, hash } from 'bcrypt';
-import { AUTH_ERROR } from './error';
+import { AUTH_ERROR } from '../error';
 
 @Injectable()
 export class AuthService {
