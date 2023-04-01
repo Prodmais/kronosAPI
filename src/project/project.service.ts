@@ -8,6 +8,21 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateProjectDto, EditProjectDto } from './dto';
 import { PROJECT_ERROR } from '../error';
 
+const DEFAULT_BOARDS = [
+  {
+    name: 'Backlog',
+  },
+  {
+    name: 'A Fazer',
+  },
+  {
+    name: 'Fazendo',
+  },
+  {
+    name: 'Concluído',
+  },
+];
+
 @Injectable()
 export class ProjectService {
   constructor(private prisma: PrismaService) {}
@@ -21,6 +36,11 @@ export class ProjectService {
           UsersIntegrated: {
             create: {
               userId: id,
+            },
+          },
+          Boards: {
+            createMany: {
+              data: DEFAULT_BOARDS,
             },
           },
         },
