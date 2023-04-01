@@ -16,6 +16,7 @@ model Projects {
   ownerUser   Int?
   Users       Users?     @relation(fields: [ownerUser], references: [id], onDelete: SetNull)
   UsersIntegrated       UserProjects[]
+  Boards    Boards[]
   @@map("projects")
 }
 
@@ -35,10 +36,11 @@ model Boards {
   name        String   @db.VarChar(40)
   description String?  @db.VarChar(255)
   isMobile    Boolean?
-  createdAt   DateTime @db.Timestamptz(6)
-  updatedAt   DateTime @db.Timestamptz(6)
-  userId      Int
-  Users       Users    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  isSprint    Boolean? @default(false)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  projectId   Int
+  Project     Projects    @relation(fields: [projectId], references: [id], onDelete: Cascade)
   Tasks       Tasks[]
   @@map("boards")
 }
@@ -77,7 +79,6 @@ model Users {
   token     String?   @db.VarChar(255)
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
-  Boards    Boards[]
   OwnerProjects   Projects[]
   Projects  UserProjects[]
   @@map("users")
