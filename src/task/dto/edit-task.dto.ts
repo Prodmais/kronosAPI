@@ -1,5 +1,4 @@
-import { Type } from 'class-transformer';
-import { IsDate, IsNumber, IsOptional, IsString } from 'class-validator';
+import { IsDateString, IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class EditTaskDto {
   @IsString()
@@ -8,8 +7,7 @@ export class EditTaskDto {
   @IsString()
   @IsOptional()
   description?: string;
-  @Type(() => Date)
-  @IsDate()
+  @IsDateString()
   @IsOptional()
   endDate?: Date;
   @IsNumber()
