@@ -7,11 +7,11 @@ import { SESMailService } from './services/sesmail.service';
 
 @Module({
   providers: [
-    SendForgotPasswordEmailService, 
-    EtherealMailService, 
-    HandlebarsMailTemplateService, 
+    SendForgotPasswordEmailService,
+    EtherealMailService,
+    HandlebarsMailTemplateService,
     SESMailService,
-    UserService
+    UserService,
   ],
 })
 export class MailModule {}

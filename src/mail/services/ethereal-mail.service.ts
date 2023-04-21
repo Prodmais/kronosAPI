@@ -17,12 +17,14 @@ interface ISendMail {
 
 @Injectable()
 export class EtherealMailService {
-
-  constructor() {}
-
-  public async sendMail({ to, from, subject, templateData }: ISendMail): Promise<void> {
+  public async sendMail({
+    to,
+    from,
+    subject,
+    templateData,
+  }: ISendMail): Promise<void> {
     const account = await nodemailer.createTestAccount();
-    const mailTemplate = new HandlebarsMailTemplateService()
+    const mailTemplate = new HandlebarsMailTemplateService();
 
     const transporter = nodemailer.createTransport({
       host: account.smtp.host,
@@ -30,22 +32,21 @@ export class EtherealMailService {
       secure: account.smtp.secure,
       auth: {
         user: account.user,
-        pass: account.pass
-      }
+        pass: account.pass,
+      },
     });
-
 
     const message = await transporter.sendMail({
       from: {
-        name: from?.name || "Equipe Cronos",
-        address: from?.email || "equipe@equipe.com.br"
+        name: from?.name || 'Equipe Cronos',
+        address: from?.email || 'equipe@equipe.com.br',
       },
       to: {
         name: to.name,
-        address: to.email
+        address: to.email,
       },
       subject,
-      html: await mailTemplate.parse(templateData)
+      html: await mailTemplate.parse(templateData),
     });
 
     console.log(`Message sent: ${message.messageId}`);

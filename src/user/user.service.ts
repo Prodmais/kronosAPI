@@ -9,8 +9,8 @@ export class UserService {
   async findByEmail(email: string) {
     const user = await this.prismaService.users.findFirst({
       where: {
-        email
-      }
+        email,
+      },
     });
 
     return user;

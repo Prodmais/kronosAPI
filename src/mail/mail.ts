@@ -4,8 +4,8 @@ interface IMailConfig {
     from: {
       email: string;
       name: string;
-    }
-  }
+    };
+  };
 }
 
 export default {
@@ -14,6 +14,6 @@ export default {
     from: {
       email: 'equipe@equipe.com.br', // contato@luizdeveloper.cf (Quando um email de envio real for criado)
       name: 'Luiz Victor',
-    }
-  }
-} as IMailConfig
+    },
+  },
+} as IMailConfig;
