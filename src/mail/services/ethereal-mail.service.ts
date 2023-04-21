@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import nodemailer from 'nodemailer';
+import * as nodemailer from 'nodemailer';
 import IParseMailTemplate from 'src/interfaces/IParseMailTemplate';
 import { HandlebarsMailTemplateService } from './handlebars-mail-template.service';
 

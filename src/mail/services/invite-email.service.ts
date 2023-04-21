@@ -18,7 +18,7 @@ interface IRequest {
 }
 
 @Injectable()
-export class SendForgotPasswordEmailService {
+export class InviteEmailService {
   constructor(
     private prisma: PrismaService,
     @Inject(forwardRef(() => UserService))
@@ -40,7 +40,7 @@ export class SendForgotPasswordEmailService {
       '..',
       '..',
       'view',
-      'forgot_password.hbs',
+      'invite_member.hbs',
     );
     //const forgotPasswordTemplate = `C:\\Users\\Usuario\\Documents\\projetos\\kronos-api\\src\\view\\forgot_password.hbs`;
     if (mailConfig.driver === 'ses') {

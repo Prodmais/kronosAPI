@@ -1,0 +1,54 @@
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>replit</title>
+  <link href="style.css" rel="stylesheet" type="text/css" />
+  <style>
+    body {
+      background-color: #85B0B0;
+    }
+
+    .message-content {
+      background-color: #002D2B;
+      color: white;
+      font-family: Arial, Helvetica, sans-serif;
+      max-width: 500px;
+      margin: 0px auto;
+      font-size: 18px;
+      padding: 8px 16px;
+      line-height: 24px;
+    }
+
+    .message-content-title {
+      text-align: center;
+    }
+
+    .message-content-link {
+      width: 25%;
+      background-color: #85B0B0;
+      padding: 6px 16px;
+      border-radius: 8px;
+      margin: 48px auto;
+      text-align: center;
+    }
+
+    .message-content-link a {
+      color: white;
+      text-decoration: none;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="message-content">
+    <h2 class="message-content-title">Convite para o projeto {{name}}!</h2>
+    <br />
+    <p>Você foi convidado para participar do projeto {{name}}.</p>
+    <p>Este convite foi destinado a {{email}}. Se você não esperava este convite, pode ignorar este
+      e-mail</p>
+    <p class="message-content-link">
+      <a href="{{link}}">Ver convite</a>
+    </p>
+    <p>Equipe Cronos</p>
+  </div>
+</body>

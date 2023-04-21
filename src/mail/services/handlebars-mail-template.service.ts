@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import handlebars from 'handlebars';
-import fs from 'fs';
+import * as fs from 'fs';
 import IParseMailTemplate from 'src/interfaces/IParseMailTemplate';
 
 @Injectable()
