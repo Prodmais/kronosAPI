@@ -3,88 +3,97 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
-  url      = "file:./dev.db"
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 model Projects {
-  id              Int            @id @default(autoincrement())
-  title           String
-  description     String?
-  createdAt       DateTime       @default(now())
-  updatedAt       DateTime       @updatedAt
-  ownerUser       Int?
-  Users           Users?         @relation(fields: [ownerUser], references: [id], onDelete: SetNull)
-  UsersIntegrated UserProjects[]
-
+  id          Int       @id @default(autoincrement())
+  title       String    @db.VarChar(40)
+  description String?   @db.VarChar(255)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  ownerUser   Int?
+  Users       Users?     @relation(fields: [ownerUser], references: [id], onDelete: SetNull)
+  UsersIntegrated       UserProjects[]
+  Boards    Boards[]
+  Sprints     Sprints[]
   @@map("projects")
 }
 
 model UserProjects {
-  id        Int      @id @default(autoincrement())
-  userId    Int
-  projectId Int
-  Users     Users    @relation(fields: [userId], references: [id], onDelete: Cascade)
-  Projects  Projects @relation(fields: [projectId], references: [id], onDelete: Cascade)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
+  id          Int       @id @default(autoincrement())
+  userId      Int
+  projectId   Int
+  Users       Users     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  Projects    Projects  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
   @@map("userProjects")
 }
 
 model Boards {
   id          Int      @id @default(autoincrement())
-  name        String
-  description String?
+  name        String   @db.VarChar(40)
+  description String?  @db.VarChar(255)
   isMobile    Boolean?
-  createdAt   DateTime
-  updatedAt   DateTime
-  userId      Int
-  Users       Users    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  isSprint    Boolean? @default(false)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  projectId   Int
+  Project     Projects    @relation(fields: [projectId], references: [id], onDelete: Cascade)
   Tasks       Tasks[]
-
   @@map("boards")
 }
 
 model Messages {
   id        Int       @id @default(autoincrement())
-  name      String    @unique
-  type      String
-  createdAt DateTime
-  updatedAt DateTime
-  deletedAt DateTime?
-
+  name      String    @unique @db.VarChar(40)
+  type      String    @db.VarChar(25)
+  createdAt DateTime  @db.Timestamptz(6)
+  updatedAt DateTime  @db.Timestamptz(6)
+  deletedAt DateTime? @db.Timestamptz(6)
   @@map("messages")
 }
 
 model Tasks {
   id          Int       @id @default(autoincrement())
-  name        String
-  description String?
-  status      String
-  endDate     DateTime?
-  createdAt   DateTime
-  updatedAt   DateTime
+  name        String    @db.VarChar(40)
+  description String?   @db.VarChar(255)
+  status      String?    @db.VarChar(20)
+  endDate     DateTime? @db.Timestamptz(6)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
   boardId     Int
   Boards      Boards    @relation(fields: [boardId], references: [id], onDelete: Cascade)
-
   @@map("tasks")
 }
 
-model Users {
-  id            Int            @id @default(autoincrement())
-  name          String
-  lastName      String
-  email         String         @unique
-  phone         String
-  password      String
-  type          String?
-  token         String?
-  createdAt     DateTime       @default(now())
-  updatedAt     DateTime       @updatedAt
-  Boards        Boards[]
-  OwnerProjects Projects[]
-  Projects      UserProjects[]
+model Sprints {
+  id          Int       @id @default(autoincrement())
+  title        String    @db.VarChar(80)
+  startDate     DateTime @db.Timestamptz(6)
+  endDate     DateTime @db.Timestamptz(6)
+  finishDate     DateTime? @db.Timestamptz(6)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  projectId   Int
+  Projects    Projects   @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  @@map("sprints")
+}
 
+model Users {
+  id        Int       @id @default(autoincrement())
+  name      String    @db.VarChar(40)
+  lastName  String    @db.VarChar(40)
+  email     String    @unique @db.VarChar(255)
+  phone     String    @db.VarChar(11)
+  password  String    @db.VarChar(255)
+  type      String?   @db.VarChar(25)
+  token     String?   @db.VarChar(255)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  OwnerProjects   Projects[]
+  Projects  UserProjects[]
   @@map("users")
 }
