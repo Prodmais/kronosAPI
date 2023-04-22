@@ -5,6 +5,7 @@ import {
   HttpStatus,
   UseGuards,
   Post,
+  Render,
 } from '@nestjs/common';
 import { Body, Put } from '@nestjs/common/decorators';
 import { Users } from '@prisma/client';
@@ -38,5 +39,11 @@ export class UserController {
   @Post('/send-email-reset-password')
   sendEmail(@Body() data: ResetPasswordUserDto) {
     return this.emailService.execute(data);
+  }
+
+  @Get('/reset-password')
+  @Render('forgot_password')
+  pageForgotPassword() {
+    return { logo: 'logo.png' };
   }
 }

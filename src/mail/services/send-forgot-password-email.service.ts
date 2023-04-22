@@ -12,6 +12,7 @@ import * as path from 'path';
 import { EtherealMailService } from './ethereal-mail.service';
 import { SESMailService } from './sesmail.service';
 import { AuthService } from 'src/auth/auth.service';
+import { ConfigService } from '@nestjs/config';
 
 interface IRequest {
   email: string;
@@ -26,6 +27,7 @@ export class SendForgotPasswordEmailService {
     private authService: AuthService,
     private etherealMail: EtherealMailService,
     private SESMail: SESMailService,
+    private config: ConfigService,
   ) {}
 
   public async execute({ email }: IRequest): Promise<void> {
@@ -42,7 +44,7 @@ export class SendForgotPasswordEmailService {
       'view',
       'forgot_password.hbs',
     );
-    //const forgotPasswordTemplate = `C:\\Users\\Usuario\\Documents\\projetos\\kronos-api\\src\\view\\forgot_password.hbs`;
+
     if (mailConfig.driver === 'ses') {
       await this.SESMail.sendMail({
         to: {
@@ -54,8 +56,11 @@ export class SendForgotPasswordEmailService {
           file: forgotPasswordTemplate,
           variables: {
             name: user.name,
-            link: `${process.env.APP_WEB_URL}/reset_password?token=${token}`,
+            link: `${this.config.get(
+              'APP_WEB_URL',
+            )}/reset_password?token=${token}`,
             token,
+            url: this.config.get('APP_WEB_URL'),
           },
         },
       });
@@ -73,8 +78,11 @@ export class SendForgotPasswordEmailService {
         file: forgotPasswordTemplate,
         variables: {
           name: user.name,
-          link: `${process.env.APP_WEB_URL}/reset_password?token=${token}`,
+          link: `${this.config.get(
+            'APP_WEB_URL',
+          )}/reset_password?token=${token}`,
           token,
+          url: this.config.get('APP_WEB_URL'),
         },
       },
     });

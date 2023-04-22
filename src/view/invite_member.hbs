@@ -2,10 +2,9 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width">
   <title>replit</title>
-  <link href="style.css" rel="stylesheet" type="text/css" />
   <style>
     body {
-      background-color: #85B0B0;
+      --background-color: #85B0B0;
     }
 
     .message-content {
@@ -19,6 +18,13 @@
       font-size: 18px;
       padding: 8px 16px;
       line-height: 24px;
+    }
+
+    .message-content-img {
+      width: 100px;
+      heigth: 100px;
+      align-self: center;
+      margin: 16px 0px 32px;
     }
 
     .message-content-title {
@@ -43,6 +49,7 @@
 
 <body>
   <div class="message-content">
+    <img src="{{url}}/img/logo.svg" class="message-content-img"/>
     <h2 class="message-content-title">Convite para o projeto {{name}}!</h2>
     <br />
     <p>Você foi convidado para participar do projeto {{name}}.</p>
