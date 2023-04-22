@@ -6,6 +6,7 @@ import {
   UseGuards,
   Post,
   Render,
+  Res,
 } from '@nestjs/common';
 import { Body, Put, Query } from '@nestjs/common/decorators';
 import { Users } from '@prisma/client';
@@ -46,12 +47,21 @@ export class UserController {
   @Get('/reset-password')
   @Render('reset_password')
   pageRegetPassword(@Query('token') token: string) {
-    console.log(token);
     return { url: this.config.get('APP_WEB_URL'), token: token };
   }
 
   @Post('/action/reset')
-  updateResetPassword(@Body() data) {
-    return this.userService.resetPassword(data?.token, data?.password);
+  async updateResetPassword(@Res() res, @Body() data) {
+    const message = await this.userService.resetPassword(
+      data?.token,
+      data?.password,
+    );
+    return res.redirect('/user/info?message=' + message);
+  }
+
+  @Get('/info')
+  @Render('info')
+  pageInfo(@Query('message') message: string) {
+    return { url: this.config.get('APP_WEB_URL'), message: message };
   }
 }

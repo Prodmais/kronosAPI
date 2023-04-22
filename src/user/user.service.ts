@@ -39,15 +39,25 @@ export class UserService {
   async resetPassword(token: string, password: string) {
     const data = this.jwtService.decode(token);
 
-    const hashPassword = await hash(password, 10);
+    if (!data) {
+      return 'NOT FOUND, 404!';
+    }
 
-    await this.prismaService.users.update({
-      where: {
-        id: data.sub,
-      },
-      data: {
-        password: hashPassword,
-      },
-    });
+    try {
+      const hashPassword = await hash(password, 10);
+
+      await this.prismaService.users.update({
+        where: {
+          id: data.sub,
+        },
+        data: {
+          password: hashPassword,
+        },
+      });
+
+      return 'Senha resetada com sucesso!';
+    } catch (err) {
+      return 'Falha ao resetar a senha, por favor tente mais tarde!';
+    }
   }
 }
