@@ -6,9 +6,10 @@ import { SendForgotPasswordEmailService } from './services/send-forgot-password-
 import { SESMailService } from './services/sesmail.service';
 import { AuthModule } from 'src/auth/auth.module';
 import { InviteEmailService } from './services/invite-email.service';
+import { JwtModule } from '@nestjs/jwt';
 
 @Module({
-  imports: [AuthModule],
+  imports: [AuthModule, JwtModule.register({})],
   providers: [
     SendForgotPasswordEmailService,
     EtherealMailService,

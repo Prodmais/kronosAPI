@@ -58,7 +58,7 @@ export class SendForgotPasswordEmailService {
             name: user.name,
             link: `${this.config.get(
               'APP_WEB_URL',
-            )}/reset_password?token=${token}`,
+            )}/user/reset-password?token=${token}`,
             token,
             url: this.config.get('APP_WEB_URL'),
           },
@@ -80,7 +80,7 @@ export class SendForgotPasswordEmailService {
           name: user.name,
           link: `${this.config.get(
             'APP_WEB_URL',
-          )}/reset_password?token=${token}`,
+          )}/user/reset-password?token=${token}`,
           token,
           url: this.config.get('APP_WEB_URL'),
         },
