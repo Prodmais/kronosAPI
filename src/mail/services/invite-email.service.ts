@@ -57,7 +57,8 @@ export class InviteEmailService {
         templateData: {
           file: forgotPasswordTemplate,
           variables: {
-            name: user.name,
+            name: project,
+            email: user.email,
             link: `${this.config.get(
               'APP_WEB_URL',
             )}/user/accept-invite?token=${token}&project=${project}`,
@@ -79,7 +80,8 @@ export class InviteEmailService {
       templateData: {
         file: forgotPasswordTemplate,
         variables: {
-          name: user.name,
+          name: project,
+          email: user.email,
           link: `${this.config.get(
             'APP_WEB_URL',
           )}/user/accept-invite?token=${token}&project=${project}`,
