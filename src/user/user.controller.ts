@@ -64,4 +64,17 @@ export class UserController {
   pageInfo(@Query('message') message: string) {
     return { url: this.config.get('APP_WEB_URL'), message: message };
   }
+
+  @Get('/accept-invite')
+  @Render('invite_accept')
+  pageAcceptInvite(
+    @Query('token') token: string,
+    @Query('project') project: string,
+  ) {
+    return {
+      url: this.config.get('APP_WEB_URL'),
+      token: token,
+      project: project,
+    };
+  }
 }

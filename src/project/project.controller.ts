@@ -14,15 +14,11 @@ import { GetUser } from 'src/auth/decorator';
 import { JwtGuard } from 'src/auth/guard';
 import { CreateProjectDto, EditProjectDto, InviteProjectDto } from './dto';
 import { ProjectService } from './project.service';
-import { InviteEmailService } from 'src/mail/services/invite-email.service';
 
 @UseGuards(JwtGuard)
 @Controller('project')
 export class ProjectController {
-  constructor(
-    private projectService: ProjectService,
-    private emailService: InviteEmailService,
-  ) {}
+  constructor(private projectService: ProjectService) {}
 
   @Post('')
   create(@GetUser('id') id: number, @Body() data: CreateProjectDto) {
@@ -65,7 +61,11 @@ export class ProjectController {
 
   @Post('/invite/:id')
   @HttpCode(HttpStatus.NO_CONTENT)
-  invite(@Body() data: InviteProjectDto) {
-    return this.emailService.execute(data);
+  invite(
+    @GetUser('id') userId: number,
+    @Param('id', ParseIntPipe) id: number,
+    @Body() data: Array<InviteProjectDto>,
+  ) {
+    return this.projectService.inviteMember(userId, id, data);
   }
 }

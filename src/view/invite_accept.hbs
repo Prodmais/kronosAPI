@@ -1,0 +1,80 @@
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>Cronos</title>
+    <link rel="icon" href="{{url}}/img/logo.svg" />
+    <style>
+        body {
+            background-color: #85B0B0;
+        }
+
+        .message-content {
+            background-color: #002D2B;
+            color: white;
+            font-family: Arial, Helvetica, sans-serif;
+            max-width: 450px;
+            min-width: 250px;
+            margin: 0px auto;
+            font-size: 18px;
+            border-radius: 8px;
+            padding: 0px 0px;
+        }
+
+        form {
+            margin: 40px 0;
+        }
+
+        .message-content-form {
+            display: flex;
+            flex-direction: column;
+            padding: 32px;
+        }
+
+        .message-content-form legend {
+            align-self: center;
+            font-size: 24px;
+            margin-bottom: 24px;
+        }
+
+        .message-content-form p {
+            text-align: center;
+            align-self: center;
+            font-size: 16px;
+            margin-bottom: 24px;
+        }
+
+        .message-content p:first-child {
+            margin-bottom: 2px;
+        }
+
+        .message-content-button {
+            width: 30%;
+            min-width: 100px;
+            background-color: #85B0B0;
+            margin-top: 24px;
+            border-radius: 8px;
+            align-self: center;
+            text-align: center;
+            border: none;
+            color: white;
+            font-size: 16px;
+            padding: 8px 16px;
+        }
+
+        .message-content-button:hover {
+            background-color: rgba(255, 255, 255, 0.7);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="message-content">
+        <form class="message-content-form" id="form-reset">
+            <legend>Convite!</legend>
+            <p>Você foi convidado a participar do projeto <b>{{project}}</b></p>
+            <p>Ao aceitar esse convite você será integrado ao projeto e poderá contribuir cada vez mais.</p>
+            <input type="hidden" id="token" name="token" value="{{token}}" />
+            <button type="submit" class="message-content-button">Aceitar</button>
+        </form>
+    </div>
+</body>

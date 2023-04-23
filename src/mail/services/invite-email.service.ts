@@ -16,6 +16,8 @@ import { ConfigService } from '@nestjs/config';
 
 interface IRequest {
   email: string;
+  idProject: number;
+  project: string;
 }
 
 @Injectable()
@@ -30,13 +32,13 @@ export class InviteEmailService {
     private config: ConfigService,
   ) {}
 
-  public async execute({ email }: IRequest): Promise<void> {
+  public async execute({ email, idProject, project }: IRequest): Promise<void> {
     const user = await this.userService.findByEmail(email);
     if (!user) {
       throw new NotFoundException(USER_ERROR.NOT_FOUND);
     }
 
-    const { token } = await this.authService.signToken(user.id, user.email);
+    const { token } = await this.authService.signToken(idProject, user.email);
     const forgotPasswordTemplate = path.resolve(
       __dirname,
       '..',
@@ -51,14 +53,14 @@ export class InviteEmailService {
           name: user.name,
           email: user.email,
         },
-        subject: '[Cronos] Recuperação de Senha',
+        subject: '[Cronos] Convite para projeto',
         templateData: {
           file: forgotPasswordTemplate,
           variables: {
             name: user.name,
             link: `${this.config.get(
               'APP_WEB_URL',
-            )}/reset_password?token=${token}`,
+            )}/user/accept-invite?token=${token}&project=${project}`,
             token,
             url: this.config.get('APP_WEB_URL'),
           },
@@ -73,14 +75,14 @@ export class InviteEmailService {
         name: user.name,
         email: user.email,
       },
-      subject: '[Cronos] Recuperação de Senha',
+      subject: '[Cronos] Convite para projeto',
       templateData: {
         file: forgotPasswordTemplate,
         variables: {
           name: user.name,
           link: `${this.config.get(
             'APP_WEB_URL',
-          )}/reset_password?token=${token}`,
+          )}/user/accept-invite?token=${token}&project=${project}`,
           token,
           url: this.config.get('APP_WEB_URL'),
         },
