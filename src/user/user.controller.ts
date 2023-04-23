@@ -77,4 +77,10 @@ export class UserController {
       project: project,
     };
   }
+
+  @Post('/action/integrate')
+  async integrateMember(@Res() res, @Body() data) {
+    const message = await this.userService.integrateMember(data?.token);
+    return res.redirect('/user/info?message=' + message);
+  }
 }

@@ -60,4 +60,48 @@ export class UserService {
       return 'Falha ao resetar a senha, por favor tente mais tarde!';
     }
   }
+
+  async integrateMember(token: string) {
+    const data = this.jwtService.decode(token) as {
+      sub: number;
+      email: string;
+    };
+
+    if (!data) {
+      return 'Convite expirado! :(';
+    }
+
+    const user = await this.prismaService.users.findUnique({
+      where: {
+        email: data.email,
+      },
+    });
+
+    if (!user) {
+      return 'Usuário não encontrado! :(';
+    }
+
+    try {
+      const integrateExist = this.prismaService.userProjects.findFirst({
+        where: {
+          userId: user.id,
+          projectId: data.sub,
+        },
+      });
+
+      if (integrateExist) {
+        return 'Você já faz parte desse projeto!';
+      }
+
+      await this.prismaService.userProjects.create({
+        data: {
+          projectId: data.sub,
+          userId: user.id,
+        },
+      });
+      return 'Parabéns, você foi integrado ao projeto!';
+    } catch (err) {
+      return 'Falha no processo de integração no projeto, por favor tente mais tarde!';
+    }
+  }
 }
