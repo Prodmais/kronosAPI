@@ -12,7 +12,7 @@ import {
 import { Delete, Put } from '@nestjs/common/decorators';
 import { GetUser } from 'src/auth/decorator';
 import { JwtGuard } from 'src/auth/guard';
-import { CreateProjectDto, EditProjectDto } from './dto';
+import { CreateProjectDto, EditProjectDto, InviteProjectDto } from './dto';
 import { ProjectService } from './project.service';
 
 @UseGuards(JwtGuard)
@@ -57,5 +57,15 @@ export class ProjectController {
     @Param('id', ParseIntPipe) id: number,
   ) {
     return this.projectService.removeBind(userId, id);
+  }
+
+  @Post('/invite/:id')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  invite(
+    @GetUser('id') userId: number,
+    @Param('id', ParseIntPipe) id: number,
+    @Body() data: Array<InviteProjectDto>,
+  ) {
+    return this.projectService.inviteMember(userId, id, data);
   }
 }

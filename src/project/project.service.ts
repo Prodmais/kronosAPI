@@ -5,8 +5,9 @@ import {
 } from '@nestjs/common';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { CreateProjectDto, EditProjectDto } from './dto';
+import { CreateProjectDto, EditProjectDto, InviteProjectDto } from './dto';
 import { PROJECT_ERROR } from '../error';
+import { InviteEmailService } from 'src/mail/services/invite-email.service';
 
 const DEFAULT_BOARDS = [
   {
@@ -25,7 +26,10 @@ const DEFAULT_BOARDS = [
 
 @Injectable()
 export class ProjectService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private emailService: InviteEmailService,
+  ) {}
 
   create(id: number, data: CreateProjectDto) {
     try {
@@ -134,5 +138,29 @@ export class ProjectService {
         projectId: id,
       },
     });
+  }
+
+  async inviteMember(
+    userId: number,
+    id: number,
+    emails: Array<InviteProjectDto>,
+  ) {
+    const project = await this.findOne(userId, id);
+
+    const promises = [];
+
+    emails.forEach((data) => {
+      promises.push(
+        this.emailService
+          .execute({
+            email: data.email,
+            idProject: id,
+            project: project.title,
+          })
+          .catch((err) => console.log(err)),
+      );
+    });
+
+    await Promise.all(promises);
   }
 }
