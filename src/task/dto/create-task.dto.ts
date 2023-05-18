@@ -11,4 +11,7 @@ export class CreateTaskDto {
   endDate: Date;
   @IsNumber()
   boardId: number;
+  @IsNumber()
+  @IsOptional()
+  ownerId?: number;
 }
