@@ -6,12 +6,20 @@ import {
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateTaskDto, EditTaskDto } from './dto';
 import { BOARD_ERROR, TASK_ERROR } from 'src/error';
+import { UserService } from 'src/user/user.service';
 
 @Injectable()
 export class TaskService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private userService: UserService,
+  ) {}
 
   async create(data: CreateTaskDto) {
+    if (data.ownerId) {
+      await this.userService.findById(data.ownerId);
+    }
+
     const boardExist = await this.prisma.boards.findUnique({
       where: {
         id: data.boardId,
@@ -37,6 +45,18 @@ export class TaskService {
       where: {
         id: id,
       },
+      include: {
+        User: {
+          select: {
+            id: true,
+            name: true,
+            lastName: true,
+            email: true,
+            createdAt: true,
+            updatedAt: true,
+          },
+        },
+      },
     });
 
     if (!task) {
@@ -51,11 +71,27 @@ export class TaskService {
       where: {
         boardId: boardId,
       },
+      include: {
+        User: {
+          select: {
+            id: true,
+            name: true,
+            lastName: true,
+            email: true,
+            createdAt: true,
+            updatedAt: true,
+          },
+        },
+      },
     });
   }
 
   async update(id: number, data: EditTaskDto) {
     await this.findOne(id);
+
+    if (data.ownerId) {
+      await this.userService.findById(data.ownerId);
+    }
 
     const task = await this.prisma.tasks.update({
       where: {

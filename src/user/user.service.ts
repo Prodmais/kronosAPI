@@ -1,8 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { EditUserDto } from './dto';
 import { JwtService } from '@nestjs/jwt';
 import { hash } from 'bcrypt';
+import { USER_ERROR } from 'src/error';
 
 @Injectable()
 export class UserService {
@@ -103,5 +104,19 @@ export class UserService {
     } catch (err) {
       return 'Falha no processo de integração no projeto, por favor tente mais tarde!';
     }
+  }
+
+  async findById(id: number) {
+    const user = await this.prismaService.users.findUnique({
+      where: {
+        id: id,
+      },
+    });
+
+    if (!user) {
+      throw new NotFoundException(USER_ERROR.NOT_FOUND);
+    }
+
+    return user;
   }
 }

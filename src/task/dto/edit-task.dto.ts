@@ -13,4 +13,7 @@ export class EditTaskDto {
   @IsNumber()
   @IsOptional()
   boardId?: number;
+  @IsNumber()
+  @IsOptional()
+  ownerId?: number;
 }
