@@ -43,6 +43,20 @@ export class BoardService {
       where: {
         projectId: id,
       },
+      include: {
+        Tasks: {
+          include: {
+            User: {
+              select: {
+                id: true,
+                name: true,
+                lastName: true,
+                email: true,
+              },
+            },
+          },
+        },
+      },
     });
   }
 
@@ -50,6 +64,20 @@ export class BoardService {
     const board = await this.prisma.boards.findUnique({
       where: {
         id: id,
+      },
+      include: {
+        Tasks: {
+          include: {
+            User: {
+              select: {
+                id: true,
+                name: true,
+                lastName: true,
+                email: true,
+              },
+            },
+          },
+        },
       },
     });
 
