@@ -27,13 +27,20 @@ export class SESMailService {
   }: ISendMail): Promise<void> {
     const mailTemplate = new HandlebarsMailTemplateService();
 
-    const transporter = nodemailer.createTransport({
-      SES: new aws.SES({
-        apiVersion: '2022-12-21',
-      }),
-    });
+    const { email, name, password, host, port } = mailConfig.defaults.from;
 
-    const { email, name } = mailConfig.defaults.from;
+    const transporter = nodemailer.createTransport({
+      // SES: new aws.SES({
+      //   apiVersion: '2022-12-21',
+      // }),
+      host: host,
+      port: port,
+      secure: true,
+      auth: {
+        user: email,
+        pass: password,
+      },
+    });
 
     const message = await transporter.sendMail({
       from: {
