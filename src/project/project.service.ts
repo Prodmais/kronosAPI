@@ -77,8 +77,11 @@ export class ProjectService {
           select: {
             id: true,
             name: true,
+            lastName: true,
             email: true,
             password: false,
+            createdAt: true,
+            updatedAt: true,
           },
         },
         UsersIntegrated: {
@@ -87,8 +90,11 @@ export class ProjectService {
               select: {
                 id: true,
                 name: true,
+                lastName: true,
                 email: true,
                 password: false,
+                createdAt: true,
+                updatedAt: true,
               },
             },
           },
