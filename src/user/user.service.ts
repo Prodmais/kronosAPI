@@ -83,7 +83,7 @@ export class UserService {
     }
 
     try {
-      const integrateExist = this.prismaService.userProjects.findFirst({
+      const integrateExist = await this.prismaService.userProjects.findFirst({
         where: {
           userId: user.id,
           projectId: data.sub,
