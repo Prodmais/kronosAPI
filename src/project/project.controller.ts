@@ -64,7 +64,7 @@ export class ProjectController {
   invite(
     @GetUser('id') userId: number,
     @Param('id', ParseIntPipe) id: number,
-    @Body() data: Array<InviteProjectDto>,
+    @Body() data: InviteProjectDto,
   ) {
     return this.projectService.inviteMember(userId, id, data);
   }

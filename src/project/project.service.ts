@@ -146,26 +146,20 @@ export class ProjectService {
     });
   }
 
-  async inviteMember(
-    userId: number,
-    id: number,
-    emails: Array<InviteProjectDto>,
-  ) {
+  async inviteMember(userId: number, id: number, emailData: InviteProjectDto) {
     const project = await this.findOne(userId, id);
 
     const promises = [];
 
-    emails.forEach((data) => {
-      promises.push(
-        this.emailService
-          .execute({
-            email: data.email,
-            idProject: id,
-            project: project.title,
-          })
-          .catch((err) => console.log(err)),
-      );
-    });
+    promises.push(
+      this.emailService
+        .execute({
+          email: emailData.email,
+          idProject: id,
+          project: project.title,
+        })
+        .catch((err) => console.log(err)),
+    );
 
     await Promise.all(promises);
   }
