@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import mailConfig from '../mail';
 import { HandlebarsMailTemplateService } from './handlebars-mail-template.service';
-import nodemailer from 'nodemailer';
+import * as nodemailer from 'nodemailer';
 import aws from 'aws-sdk';
 import IParseMailTemplate from 'src/interfaces/IParseMailTemplate';
 
@@ -35,7 +35,7 @@ export class SESMailService {
       // }),
       host: host,
       port: port,
-      secure: true,
+      secure: false,
       auth: {
         user: email,
         pass: password,
