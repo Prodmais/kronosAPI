@@ -158,7 +158,9 @@ export class ProjectService {
           idProject: id,
           project: project.title,
         })
-        .catch((err) => console.log(err)),
+        .catch((err) => {
+          throw err;
+        }),
     );
 
     await Promise.all(promises);
